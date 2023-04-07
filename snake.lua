@@ -1,4 +1,4 @@
-dll = require("doublylinkedlist")
+dll = require("utilities/doublylinkedlist")
 
 local const = {
   start_coordinates = {

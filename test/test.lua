@@ -1,4 +1,4 @@
-dll = require("doublylinkedlist")
+dll = require("../utilities/doublylinkedlist")
 
 list = dll.new()
 list:print()
@@ -16,11 +16,11 @@ list:print()
 print(list:isEmpty())
 
 
-Snake = require("snake")
+Snake = require("../snake")
 
 snake = Snake.new()
 snake:print()
-snake:moveDown()
+snake:move()
 snake:print()
 for v in snake:getIter() do
   print(v)
