@@ -97,3 +97,7 @@ end
 function Snake:print()
   self.snake:print()
 end
+
+function Snake:getHead()
+  return self.snake.head.value
+end
