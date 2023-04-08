@@ -6,6 +6,12 @@ function love.load()
   require("snake")
   require("food")
 
+  music = {}
+  music.bg = love.audio.newSource("assets/audio/POL-sunset-route-short.wav", "stream")
+  music.bg:setLooping(true)
+  music.bg:setVolume(0.4)
+  music.bg:play()
+
   Snake:load()
   Food:load()
 
