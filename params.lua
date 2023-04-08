@@ -1,5 +1,6 @@
 PARAMS = {}
 
-PARAMS.pixelSize = 16
-PARAMS.pixelCountX = 16
-PARAMS.pixelCountY = 20
+PARAMS.pixelSize = 32
+PARAMS.pixelCountX = 8
+PARAMS.pixelCountY = 10
+PARAMS.speed = 5

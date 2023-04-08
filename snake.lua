@@ -3,15 +3,15 @@ dll = require("utilities/doublylinkedlist")
 local const = {
   start_coordinates = {
     {
+      x = 0,
+      y = 1,
+    },
+    {
       x = 1,
       y = 1,
     },
     {
       x = 2,
-      y = 1,
-    },
-    {
-      x = 3,
       y = 1,
     },
   }
@@ -37,7 +37,7 @@ function Snake:load()
 
   self.currentDirection = directions.r
 
-  self.rate = 0.1
+  self.rate = 1 / PARAMS.speed
 
   self.timer = 0
 end

@@ -1,8 +1,12 @@
 Food = {}
 
 function Food:load()
-  self.x = 5
-  self.y = 12
+  require("params")
+
+  math.randomseed(os.time())
+
+  self.x = math.random(5, PARAMS.pixelCountX - 1)
+  self.y = math.random(3, PARAMS.pixelCountY - 1)
 
   ps = PARAMS.pixelSize
 end

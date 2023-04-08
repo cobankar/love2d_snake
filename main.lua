@@ -16,6 +16,15 @@ function love.load()
   Food:load()
 
   math.randomseed(os.time())
+
+  menu = {}
+  menu.active = true
+  menu.font = love.graphics.newFont(16)
+  menu.text = love.graphics.newText(menu.font, string.upper("press any key to start"))
+  menu.x = PARAMS.pixelCountX * PARAMS.pixelSize / 2
+  menu.xo = menu.text:getWidth() / 2 
+  menu.y = PARAMS.pixelSize / 2
+  menu.yo = menu.text:getHeight() / 2
 end
 
 function moveFood()
@@ -35,18 +44,38 @@ function moveFood()
 end
 
 function love.update(dt)
-  Snake:update(dt)
-  if checkCollision(Snake:getHead(), Food) then
-    Snake:eat()
-    moveFood()
+  if menu.active then
+    return
+  else
+    Snake:update(dt)
+    if checkCollision(Snake:getHead(), Food) then
+      Snake:eat()
+      moveFood()
+    end
   end
 end
 
 function love.draw()
+  if menu.active then
+    print(menu.x, menu.xo)
+    love.graphics.draw(menu.text, menu.x, menu.y, nil, nil, nil, menu.xo, menu.yo)
+  end
   Food:draw()
   Snake:draw()
 end
 
 function love.keypressed(key)
+  if key == "z" then
+    resetGame()
+    return
+  end
+  menu.active = false
   Snake:keypressed(key)
+end
+
+function resetGame()
+  Snake:load()
+  Food:load()
+
+  menu.active = true
 end
