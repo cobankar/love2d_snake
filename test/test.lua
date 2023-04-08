@@ -16,7 +16,7 @@ list:print()
 print(list:isEmpty())
 
 
-Snake = require("../snake")
+--[[ Snake = require("../snake")
 
 snake = Snake.new()
 snake:print()
@@ -24,4 +24,13 @@ snake:move()
 snake:print()
 for v in snake:getIter() do
   print(v)
+end ]]
+
+function testDllIter()
+  list = dll.new()
+  list:insertHead(2)
+  list:insertTail(4)
+  for item in list:getIter() do
+    print(item)
+  end
 end

@@ -44,7 +44,11 @@ end
 
 function Snake:move()
   self.snake:insertHead({x = self.snake.head.value.x + self.currentDirection.x, y = self.snake.head.value.y + self.currentDirection.y})
-  self.snake:deleteTail()
+  if not self.grow then
+    self.snake:deleteTail()
+  else
+    self.grow = false
+  end
 end
 
 function Snake:update(dt)
@@ -55,7 +59,7 @@ function Snake:update(dt)
   end
 end
 
-function Snake:getIter(self)
+function Snake:getIter()
   return self.snake:getIter()
 end
 
@@ -100,4 +104,8 @@ end
 
 function Snake:getHead()
   return self.snake.head.value
+end
+
+function Snake:eat()
+  self.grow = true
 end
