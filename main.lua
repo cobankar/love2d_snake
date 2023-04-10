@@ -10,15 +10,36 @@ function love.load()
   music.bg = love.audio.newSource("assets/audio/POL-sunset-route-short.wav", "stream")
   music.bg:setLooping(true)
   music.bg:setVolume(0.1)
-  music.bg:play()
 
   Snake:load()
   Food:load()
 
   math.randomseed(os.time())
 
+  game_state = {}
+  game_state.menu = true
+  game_state.running = false
+  game_state.ended = false
+  game_state.setRunning = function(self)
+    self.menu = false
+    self.running = true
+    self.ended = false
+    music.bg:play()
+  end
+  game_state.setMenu  = function(self)
+    self.menu  = true
+    self.running = false
+    self.ended = false
+    music.bg:stop()
+  end
+  game_state.setEnded = function(self)
+    self.menu = false
+    self.running = false
+    self.ended = true
+    music.bg:stop()
+  end
+
   menu = {}
-  menu.active = true
   menu.font = love.graphics.newFont(16)
   menu.text = love.graphics.newText(menu.font, string.upper("press any key to start"))
   menu.x = PARAMS.pixelCountX * PARAMS.pixelSize / 2
@@ -43,9 +64,7 @@ function moveFood()
 end
 
 function love.update(dt)
-  if menu.active then
-    return
-  else
+  if game_state.running then
     Snake:update(dt)
     if checkCollision(Snake:getHead(), Food) then
       Snake:eat()
@@ -55,7 +74,7 @@ function love.update(dt)
 end
 
 function love.draw()
-  if menu.active then
+  if game_state.menu then
     love.graphics.draw(menu.text, menu.x, menu.y, nil, nil, nil, menu.xo, menu.yo)
   end
   Food:draw()
@@ -63,17 +82,21 @@ function love.draw()
 end
 
 function love.keypressed(key)
-  if key == "z" then
-    resetGame()
-    return
+  if game_state.menu then
+    game_state:setRunning()
   end
-  menu.active = false
-  Snake:keypressed(key)
+  if game_state.running then
+    if key == "z" then
+      resetGame()
+      return
+    end
+    Snake:keypressed(key)
+  end
 end
 
 function resetGame()
   Snake:load()
   Food:load()
 
-  menu.active = true
+  game_state:setMenu()
 end
