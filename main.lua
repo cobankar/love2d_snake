@@ -9,7 +9,7 @@ function love.load()
   music = {}
   music.bg = love.audio.newSource("assets/audio/POL-sunset-route-short.wav", "stream")
   music.bg:setLooping(true)
-  music.bg:setVolume(0.4)
+  music.bg:setVolume(0.1)
   music.bg:play()
 
   Snake:load()
@@ -35,7 +35,6 @@ function moveFood()
     end
   end
   for coordinates in Snake:getIter() do
-    print(coordinates.x, coordinates.y)
     local i = findIndex(possibleCoordinates, coordinates)
     if i then table.remove(possibleCoordinates, i) end
   end
@@ -57,7 +56,6 @@ end
 
 function love.draw()
   if menu.active then
-    print(menu.x, menu.xo)
     love.graphics.draw(menu.text, menu.x, menu.y, nil, nil, nil, menu.xo, menu.yo)
   end
   Food:draw()

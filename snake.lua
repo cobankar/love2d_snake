@@ -23,6 +23,20 @@ directions.r = {x = 1, y = 0}
 directions.u = {x = 0, y = -1}
 directions.d = {x = 0, y = 1}
 
+function allowedDirectionChange(old, new)
+  if old == directions.l then
+    return new ~= directions.r
+  elseif old == directions.r then
+    return new ~= directions.l
+  elseif old == directions.u then
+    return new ~= directions.d
+  elseif old == directions.d then
+    return new ~= directions.u
+  else
+    return false
+  end
+end
+
 Snake = {}
 
 function Snake:load()
@@ -37,6 +51,8 @@ function Snake:load()
 
   self.currentDirection = directions.r
 
+  self.lastStep = self.currentDirection
+
   self.rate = 1 / PARAMS.speed
 
   self.timer = 0
@@ -44,6 +60,7 @@ end
 
 function Snake:move()
   self.snake:insertHead({x = self.snake.head.value.x + self.currentDirection.x, y = self.snake.head.value.y + self.currentDirection.y})
+  self.lastStep = self.currentDirection
   if not self.grow then
     self.snake:deleteTail()
   else
@@ -71,19 +88,27 @@ function Snake:draw()
 end
 
 function Snake:changeDirectionLeft()
-  self.currentDirection = directions.l
+  if allowedDirectionChange(self.lastStep, directions.l) then
+    self.currentDirection = directions.l
+  end
 end
 
 function Snake:changeDirectionRight()
-  self.currentDirection = directions.r
+  if allowedDirectionChange(self.lastStep, directions.r) then
+    self.currentDirection = directions.r
+  end
 end
 
 function Snake:changeDirectionUp()
-  self.currentDirection = directions.u
+  if allowedDirectionChange(self.lastStep, directions.u) then
+    self.currentDirection = directions.u
+  end
 end
 
 function Snake:changeDirectionDown()
-  self.currentDirection = directions.d
+  if allowedDirectionChange(self.lastStep, directions.d) then
+    self.currentDirection = directions.d
+  end
 end
 
 function Snake:keypressed(key)
