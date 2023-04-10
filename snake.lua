@@ -68,16 +68,38 @@ function Snake:move()
   end
 end
 
-function Snake:update(dt)
-    self.timer = self.timer + dt
-    if self.timer >= self.rate then
-      self.timer = 0
-      self:move()
+function collides(snake)
+  local head = snake.snake.head.value
+  for body in snake:getIterBody() do
+    if checkCollision(head, body) then
+      return true
+    end
+  end
+  return false
+end
+
+function Snake:getLength()
+  return self.snake:getLength()
+end
+  
+function Snake:update(dt, stopGame)
+  self.timer = self.timer + dt
+  if self.timer >= self.rate then
+    self.timer = 0
+    self:move()
+  end
+  if collides(self) then
+    local score = self:getLength()
+    stopGame(score)
   end
 end
 
 function Snake:getIter()
   return self.snake:getIter()
+end
+
+function Snake:getIterBody() -- iterates except for the head
+  return self.snake:getIterNoHead()
 end
 
 function Snake:draw()

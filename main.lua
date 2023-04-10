@@ -46,6 +46,17 @@ function love.load()
   menu.xo = menu.text:getWidth() / 2 
   menu.y = PARAMS.pixelSize / 2
   menu.yo = menu.text:getHeight() / 2
+
+  gameEnded = {}
+  gameEnded.font = love.graphics.newFont(16)
+  gameEnded.baseText = "GAME OVER\nSCORE: "
+  gameEnded.setScore = function(self, score)
+    self.text = love.graphics.newText(self.font, self.baseText .. score)
+    self.x = PARAMS.pixelCountX * PARAMS.pixelSize / 2
+    self.xo = self.text:getWidth() / 2 
+    self.y = PARAMS.pixelCountY * PARAMS.pixelSize - self.text:getHeight() / 2 - PARAMS.pixelSize / 2
+    self.yo = self.text:getHeight() / 2
+  end
 end
 
 function moveFood()
@@ -63,9 +74,14 @@ function moveFood()
   Food:setCoordinates(newCoordinates.x, newCoordinates.y)
 end
 
+function stopGame(score)
+  game_state:setEnded()
+  gameEnded:setScore(score)
+end
+
 function love.update(dt)
   if game_state.running then
-    Snake:update(dt)
+    Snake:update(dt, stopGame)
     if checkCollision(Snake:getHead(), Food) then
       Snake:eat()
       moveFood()
@@ -74,15 +90,24 @@ function love.update(dt)
 end
 
 function love.draw()
-  if game_state.menu then
-    love.graphics.draw(menu.text, menu.x, menu.y, nil, nil, nil, menu.xo, menu.yo)
-  end
   Food:draw()
   Snake:draw()
+  if game_state.menu or game_state.ended then
+    love.graphics.setColor(1,1,1)
+    love.graphics.draw(menu.text, menu.x, menu.y, nil, nil, nil, menu.xo, menu.yo)
+  end
+  if game_state.ended then
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(gameEnded.text, gameEnded.x, gameEnded.y, nil, nil, nil, gameEnded.xo, gameEnded.yo)
+  end
+  love.graphics.print(love.timer.getFPS(), menu.font)
 end
 
 function love.keypressed(key)
   if game_state.menu then
+    game_state:setRunning()
+  elseif game_state.ended then
+    resetGame()
     game_state:setRunning()
   end
   if game_state.running then

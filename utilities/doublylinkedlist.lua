@@ -63,8 +63,30 @@ DoublyLinkedList.new = function()
       end
     end,
 
+    getLength = function(self)
+      local node = self.head
+      local count = 0
+      while node do
+        count = count + 1
+        node = node.next
+      end
+      return count
+    end,
+
     getIter = function(self)
       node = self.head
+      return function()
+        if node == nil then return nil end
+        local value = node.value
+        node = node.next
+        return value
+      end
+    end,
+
+    getIterNoHead = function(self)
+      node = self.head
+      if node == nil then return end
+      node = node.next
       return function()
         if node == nil then return nil end
         local value = node.value
